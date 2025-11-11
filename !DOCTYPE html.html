@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 25.2.3.2 (Linux)"/>
+	<meta name="created" content="00:00:00"/>
+	<meta name="changed" content="00:00:00"/>
+	<style type="text/css">
+		@page { size: 8.27in 11.69in; margin: 0.79in }
+		p { margin-bottom: 0.1in; line-height: 115%; background: transparent }
+		pre { font-size: 10pt; font-family: "Liberation Mono", monospace; background: transparent }
+	</style>
+</head>
+<body lang="en-US" link="#000080" vlink="#800000" dir="ltr"><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;fi&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot; /&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+  &lt;title&gt;Pulla Klikkeri&lt;/title&gt;
+  &lt;link href=&quot;https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;/head&gt;
+&lt;body class=&quot;bg-gray-100 text-center p-6&quot;&gt;
+  &lt;h1 class=&quot;text-3xl font-bold mb-4&quot;&gt;Pulla Klikkeri&lt;/h1&gt;
+
+  &lt;p class=&quot;mb-4&quot;&gt;Kyllä, tämä on kuin Cookie Clicker... mutta pullalla.&lt;/p&gt;
+
+  &lt;div&gt;
+    &lt;button id=&quot;clickBtn&quot; class=&quot;bg-yellow-300 p-6 rounded-full text-2xl hover:scale-110 transition&quot; aria-label=&quot;Klikkaa pullaa&quot;&gt;🥯&lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;p class=&quot;text-xl mt-4&quot;&gt;Pullia: &lt;span id=&quot;count&quot;&gt;0&lt;/span&gt;&lt;/p&gt;
+  &lt;p class=&quot;text-md mt-2&quot;&gt;Aika: &lt;span id=&quot;time&quot;&gt;0&lt;/span&gt; sekuntia&lt;/p&gt;
+
+  &lt;div class=&quot;mt-8&quot;&gt;
+    &lt;button id=&quot;upgradeBtn&quot; class=&quot;bg-green-300 px-4 py-2 rounded text-lg&quot; aria-label=&quot;Osta mummon apu&quot;&gt;Osta mummon apu (10 pullaa)&lt;/button&gt;
+    &lt;p id=&quot;upgrades&quot;&gt;Mummoja: 0&lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;mt-8&quot;&gt;
+    &lt;h2 class=&quot;text-xl font-bold&quot;&gt;Rekrytiimi&lt;/h2&gt;
+    &lt;p&gt;Osta apureita. Jokainen ostos lisää &lt;b&gt;+2&lt;/b&gt; apuria kerralla.&lt;/p&gt;
+    &lt;div style=&quot;margin-top:10px;&quot;&gt;
+      &lt;button id=&quot;buyMummo2&quot;&gt;Osta Mummo (50 pullaa)&lt;/button&gt; &lt;span id=&quot;mummo2Count&quot;&gt;0&lt;/span&gt;&lt;br&gt;
+      &lt;button id=&quot;buySeta&quot;&gt;Osta Setä (100 pullaa)&lt;/button&gt; &lt;span id=&quot;setaCount&quot;&gt;0&lt;/span&gt;&lt;br&gt;
+      &lt;button id=&quot;buyKoira&quot;&gt;Osta Koira (150 pullaa)&lt;/button&gt; &lt;span id=&quot;koiraCount&quot;&gt;0&lt;/span&gt;&lt;br&gt;
+      &lt;button id=&quot;buyKissa&quot;&gt;Osta Kissa (200 pullaa)&lt;/button&gt; &lt;span id=&quot;kissaCount&quot;&gt;0&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;mt-4&quot;&gt;
+    &lt;input id=&quot;cheatInput&quot; type=&quot;text&quot; placeholder=&quot;Syötä koodi (esim. 69mummo)&quot; aria-label=&quot;Syötä koodi&quot; /&gt;
+    &lt;button id=&quot;cheatBtn&quot; aria-label=&quot;Käytä koodi&quot;&gt;Käytä koodi&lt;/button&gt;
+    &lt;div id=&quot;cheatMsg&quot; style=&quot;margin-top:8px;font-size:0.9rem;color:#333;&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;mt-8&quot;&gt;
+    &lt;img src=&quot;https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Pulla.jpg/320px-Pulla.jpg&quot; alt=&quot;Iso Pulla&quot; style=&quot;width:200px; margin:auto; border-radius:12px;&quot; /&gt;
+  &lt;/div&gt;
+
+  &lt;h2 class=&quot;mt-8 text-2xl font-bold&quot;&gt;Pullamarkkinat&lt;/h2&gt;
+  &lt;p&gt;Hinnat muuttuvat joka minuutti ja voit ostaa tai myydä.&lt;/p&gt;
+  &lt;table id=&quot;marketTable&quot; style=&quot;margin:auto; margin-top:12px; border-collapse:collapse;&quot;&gt;
+    &lt;tr&gt;&lt;th style=&quot;padding:6px; border-bottom:1px solid #666;&quot;&gt;Tuote&lt;/th&gt;&lt;th style=&quot;padding:6px; border-bottom:1px solid #666;&quot;&gt;Hinta&lt;/th&gt;&lt;th style=&quot;padding:6px; border-bottom:1px solid #666;&quot;&gt;Muutos%&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Kurkku&lt;/td&gt;&lt;td&gt;10&lt;/td&gt;&lt;td&gt;0%&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;buy&quot;&gt;Osta&lt;/button&gt;&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;sell&quot;&gt;Myy&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Majoneesi&lt;/td&gt;&lt;td&gt;15&lt;/td&gt;&lt;td&gt;0%&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;buy&quot;&gt;Osta&lt;/button&gt;&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;sell&quot;&gt;Myy&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Kalja&lt;/td&gt;&lt;td&gt;25&lt;/td&gt;&lt;td&gt;0%&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;buy&quot;&gt;Osta&lt;/button&gt;&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;sell&quot;&gt;Myy&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Suomi Vodka&lt;/td&gt;&lt;td&gt;50&lt;/td&gt;&lt;td&gt;0%&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;buy&quot;&gt;Osta&lt;/button&gt;&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;sell&quot;&gt;Myy&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;
+  &lt;/table&gt;
+
+  &lt;p id=&quot;inventory&quot; style=&quot;margin-top:10px;&quot;&gt;Sinulla ei ole tuotteita vielä.&lt;/p&gt;
+
+  &lt;canvas id=&quot;marketChart&quot; width=&quot;400&quot; height=&quot;200&quot; style=&quot;margin-top:20px; border:1px solid #aaa;&quot;&gt;&lt;/canvas&gt;
+
+  &lt;div class=&quot;mt-8&quot;&gt;
+    &lt;label&gt;Ostomäärä: &lt;/label&gt;
+    &lt;select id=&quot;buyAmount&quot;&gt;
+      &lt;option value=&quot;1&quot;&gt;1x&lt;/option&gt;
+      &lt;option value=&quot;10&quot;&gt;10x&lt;/option&gt;
+      &lt;option value=&quot;200&quot;&gt;200x&lt;/option&gt;
+    &lt;/select&gt;
+  &lt;/div&gt;
+
+  &lt;script&gt;
+    const countDisplay = document.getElementById(&quot;count&quot;);
+    const clickBtn = document.getElementById(&quot;clickBtn&quot;);
+    const upgradeBtn = document.getElementById(&quot;upgradeBtn&quot;);
+    const upgradesDisplay = document.getElementById(&quot;upgrades&quot;);
+    const timeDisplay = document.getElementById(&quot;time&quot;);
+    const cheatBtn = document.getElementById('cheatBtn');
+    const cheatInput = document.getElementById('cheatInput');
+    const cheatMsg = document.getElementById('cheatMsg');
+
+    let count = 0;
+    let mummot = 0;
+    let mummo2 = 0, seta = 0, koira = 0, kissa = 0;
+    let seconds = 0;
+    let prestige = 0;
+    let prestigeMultiplier = 1;
+    let inventory = { Kurkku:0, Majoneesi:0, Kalja:0, 'Suomi Vodka':0 };
+    let history = { Kurkku: [] };
+    let costMummo2 = 2;
+    let costSeta = 2;
+    let costKoira = 2;
+    let costKissa = 2;
+
+    const rateMummo2 = 1;
+    const rateSeta = 4;
+    const rateKoira = 10;
+    const rateKissa = 25;
+
+    function updateCounter() {
+      countDisplay.textContent = count;
+    }
+
+    function updateTime() {
+      seconds++;
+      const days = Math.floor(seconds / 86400);
+      const hours = Math.floor((seconds % 86400) / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const secs = seconds % 60;
+      timeDisplay.textContent = `${days}d ${hours}h ${minutes}m ${secs}s`;
+    }
+
+    function updateUpgrades() {
+      upgradesDisplay.textContent = `Mummoja: ${mummot}`;
+    }
+
+    function updateInventoryText() {
+      const inv = Object.entries(inventory).filter(([_,v])=&gt;v&gt;0).map(([k,v])=&gt;k+&quot;: &quot;+v).join(', ');
+      document.getElementById('inventory').textContent = inv || 'Sinulla ei ole tuotteita vielä.';
+    }
+
+    function updatePrices() {
+      const rows = [...document.getElementById('marketTable').querySelectorAll('tr')].slice(1);
+      let previousPrices = rows.map(r =&gt; parseFloat(r.children[1].textContent));
+      rows.forEach((row,i)=&gt;{
+        const priceCell = row.children[1];
+        const changeCell = row.children[2];
+        const oldPrice = previousPrices[i];
+        const newPrice = Math.max(1, oldPrice * (1 + (Math.random()-0.5)*0.2));
+        previousPrices[i] = newPrice;
+        priceCell.textContent = newPrice.toFixed(2);
+        const change = ((newPrice - oldPrice)/oldPrice*100).toFixed(1);
+        changeCell.textContent = change + '%';
+      });
+      history.Kurkku.push(previousPrices[0]);
+      if(history.Kurkku.length&gt;40) history.Kurkku.shift();
+      drawChart();
+    }
+
+    function drawChart() {
+      const ctx = document.getElementById('marketChart').getContext('2d');
+      ctx.clearRect(0,0,400,200);
+      const data = history.Kurkku;
+      if(data.length&lt;2) return;
+      const max = Math.max(...data);
+      const min = Math.min(...data);
+      data.forEach((value, index) =&gt; {
+        const x = (index / data.length) * 400;
+        const y = 200 - ((value - min) / (max - min)) * 200;
+        ctx.fillStyle = 'blue';
+        ctx.fillRect(x, y, 2, 2);
+      });
+    }
+
+    function totalProduction() {
+      return (
+        mummot * 1 +
+        mummo2 * rateMummo2 +
+        seta * rateSeta +
+        koira * rateKoira +
+        kissa * rateKissa
+      ) * prestigeMultiplier;
+    }
+
+    function prestigeReset() {
+      prestige++;
+      prestigeMultiplier = 1 + prestige * 0.5;
+      count = 0;
+      mummot = mummo2 = seta = koira = kissa = 0;
+      costMummo2 = costSeta = costKoira = costKissa = 2;
+      updateRecruitUI();
+      updateCounter();
+    }
+
+    function tryBuy(cost, addCallback) {
+      if(count &gt;= cost) {
+        count -= cost;
+        updateCounter();
+        addCallback();
+      }
+    }
+
+    function buyUnit(unit, costVarName, countSpanId) {
+      const amt = parseInt(document.getElementById('buyAmount').value, 10);
+      for(let i=0;i&lt;amt;i++){
+        if(count &gt;= window[costVarName]){
+          count -= window[costVarName];
+          window[unit] += 2;
+          window[costVarName]++;
+        }
+      }
+      updateCounter();
+      document.getElementById(countSpanId).textContent = window[unit];
+      updateRecruitUI();
+    }
+
+    function updateRecruitUI() {
+      document.getElementById('buyMummo2').textContent = `Osta Mummo (${costMummo2}€)`;
+      document.getElementById('buySeta').textContent = `Osta Setä (${costSeta}€)`;
+      document.getElementById('buyKoira').textContent = `Osta Koira (${costKoira}€)`;
+      document.getElementById('buyKissa').textContent = `Osta Kissa (${costKissa}€)`;
+    }
+
+    function applyCheat(code) {
+      const normalized = (code || '').trim().toLowerCase();
+      if (normalized.match(/^mummo(\d+)$/)) {
+        const amount = parseInt(normalized.match(/^mummo(\d+)$/)[1], 10);
+        count += amount * 1000000000;
+        updateCounter();
+        cheatMsg.textContent = 'Lisätty ' + amount + ' miljardia pullaa!';
+      } else {
+        cheatMsg.textContent = 'Virheellinen koodi. Käytä muotoa mummo1, mummo2...';
+      }
+    }
+
+    clickBtn.addEventListener(&quot;click&quot;, () =&gt; {
+      count++;
+      updateCounter();
+    });
+
+    upgradeBtn.addEventListener(&quot;click&quot;, () =&gt; {
+      if (count &gt;= 10) {
+        count -= 10;
+        mummot++;
+        updateCounter();
+        updateUpgrades();
+      }
+    });
+
+    document.getElementById(&quot;buyMummo2&quot;).addEventListener('click', ()=&gt;buyUnit('mummo2','costMummo2','mummo2Count'));
+    document.getElementById(&quot;buySeta&quot;).addEventListener('click', ()=&gt;buyUnit('seta','costSeta','setaCount'));
+    document.getElementById(&quot;buyKoira&quot;).addEventListener('click', ()=&gt;buyUnit('koira','costKoira','koiraCount'));
+    document.getElementById(&quot;buyKissa&quot;).addEventListener('click', ()=&gt;buyUnit('kissa','costKissa','kissaCount'));
+
+    cheatBtn.addEventListener('click', () =&gt; applyCheat(cheatInput.value));
+    cheatInput.addEventListener('keydown', (e) =&gt; {
+      if (e.key === 'Enter') applyCheat(cheatInput.value);
+    });
+
+    setInterval(updateTime, 1000);
+    setInterval(() =&gt; {
+      count += totalProduction();
+      updateCounter();
+    }, 1000);
+    setInterval(updatePrices, 60000);
+    setInterval(()=&gt;{
+      count += mummot + seta + koira + kissa;
+      updateCounter();
+    },1000);
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+</body>
+</html>
