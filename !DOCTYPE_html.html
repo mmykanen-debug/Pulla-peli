@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>!DOCTYPE html.html - Pulla Klikkeri</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f3f4f6;color:#111;text-align:center;padding:18px;}
+    h1{font-size:28px;margin-bottom:6px;}
+    .big-btn{width:220px;height:220px;border-radius:50%;font-size:64px;border:none;background:linear-gradient(#ffd27a,#ffb347);box-shadow:0 6px 18px rgba(0,0,0,0.15);cursor:pointer;transition:transform .08s;}
+    .big-btn:active{transform:scale(.96);}
+    .row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:12px;}
+    .card{background:white;padding:12px;border-radius:8px;box-shadow:0 6px 12px rgba(0,0,0,0.06);min-width:220px;}
+    table{border-collapse:collapse;margin:auto;}
+    th,td{padding:6px 8px;border-bottom:1px solid #eee;}
+    canvas{background:white;border-radius:6px;}
+    .small{font-size:13px;color:#444}
+    button.smallbtn{padding:6px 10px;border-radius:6px;border:1px solid #ddd;background:#fafafa;cursor:pointer}
+    input[type=text]{padding:6px;border-radius:6px;border:1px solid #ccc}
+    select{padding:6px;border-radius:6px;border:1px solid #ccc}
+  </style>
+</head>
+<body>
+  <h1>Pulla Klikkeri — "!DOCTYPE html.html"</h1>
+  <p class="small">Klikkaa isoa pullaa. Sisältää markkinat, ostettavat apurit, koodit ja aikalaskurin.</p>
+
+  <div class="card" style="display:inline-block;margin-top:8px;">
+    <button id="clickBtn" class="big-btn">🥐</button>
+    <p style="margin:8px 0;font-size:20px">Pullia: <span id="count">0</span></p>
+    <p class="small">Tuotanto /s: <span id="prod">0</span></p>
+    <p class="small">Aika käynnissä: <span id="uptime">0d 0h 0m 0s</span></p>
+  </div>
+
+  <div class="row">
+    <div class="card">
+      <h3>Cheatit</h3>
+      <p class="small">Syötä esim. <b>mummo1</b> (lisää 1 miljardi), tai <b>mummo5</b> (5 miljardia). Voi käyttää monta kertaa.</p>
+      <input id="cheatInput" type="text" placeholder="Syötä koodi kuten mummo1" />
+      <button id="cheatBtn" class="smallbtn">Käytä</button>
+      <div id="cheatMsg" class="small" style="margin-top:8px"></div>
+    </div>
+
+    <div class="card">
+      <h3>Osta apureita</h3>
+      <p class="small">Kaikki alkukustannukset ovat 2€. Jokainen ostettu nostaa kyseisen apurin hintaa +1€.</p>
+      <div style="text-align:left">
+        <label>Ostomäärä: <select id="buyAmount"><option value="1">1x</option><option value="10">10x</option><option value="200">200x</option></select></label>
+        <hr>
+        <div style="margin-bottom:8px">
+          <div><b>Mummo</b> — Omistat: <span id="mummoCount">0</span></div>
+          <div>Hinta nyt: <span id="mummoCost">2</span>€</div>
+          <button class="smallbtn" id="buyMummo">Osta</button>
+        </div>
+        <div style="margin-bottom:8px">
+          <div><b>Setä</b> — Omistat: <span id="setaCount">0</span></div>
+          <div>Hinta nyt: <span id="setaCost">2</span>€</div>
+          <button class="smallbtn" id="buySeta">Osta</button>
+        </div>
+        <div style="margin-bottom:8px">
+          <div><b>Koira</b> — Omistat: <span id="koiraCount">0</span></div>
+          <div>Hinta nyt: <span id="koiraCost">2</span>€</div>
+          <button class="smallbtn" id="buyKoira">Osta</button>
+        </div>
+        <div style="margin-bottom:8px">
+          <div><b>Kissa</b> — Omistat: <span id="kissaCount">0</span></div>
+          <div>Hinta nyt: <span id="kissaCost">2</span>€</div>
+          <button class="smallbtn" id="buyKissa">Osta</button>
+        </div>
+        <p class="small">Huom: jokaisen ostokerran jälkeen kyseisen apurin tuotto per yksikkö tuplaantuu (kerroin x2).</p>
+      </div>
+    </div>
+
+    <div class="card" style="max-width:520px">
+      <h3>Pullamarkkinat (päivittyy 60s välein)</h3>
+      <table id="marketTable">
+        <tr><th>Tuote</th><th>Hinta</th><th>Muutos</th><th></th></tr>
+        <tr data-key="A"><td>A (Kurkku)</td><td class="price">10.00</td><td class="change">0%</td><td><button class="buyMarket smallbtn">Osta</button> <button class="sellMarket smallbtn">Myy</button></td></tr>
+        <tr data-key="B"><td>B (Majoneesi)</td><td class="price">15.00</td><td class="change">0%</td><td><button class="buyMarket smallbtn">Osta</button> <button class="sellMarket smallbtn">Myy</button></td></tr>
+        <tr data-key="C"><td>C (Kalja)</td><td class="price">25.00</td><td class="change">0%</td><td><button class="buyMarket smallbtn">Osta</button> <button class="sellMarket smallbtn">Myy</button></td></tr>
+        <tr data-key="D"><td>D (Suomi Vodka)</td><td class="price">50.00</td><td class="change">0%</td><td><button class="buyMarket smallbtn">Osta</button> <button class="sellMarket smallbtn">Myy</button></td></tr>
+      </table>
+      <p class="small" style="margin-top:8px">Sinun inventaario: <span id="marketInv">Ei mitään</span></p>
+      <canvas id="marketChart" width="520" height="220" style="margin-top:8px"></canvas>
+    </div>
+  </div>
+
+  <p class="small" style="margin-top:12px">Tämä tiedosto valmistellaan julkaisua varten.</p>
+
+<script>
+/* --- Peli-tilat --- */
+let count = 0;
+const countEl = document.getElementById('count');
+const prodEl = document.getElementById('prod');
+const clickBtn = document.getElementById('clickBtn');
+
+clickBtn.addEventListener('click', ()=>{ count++; updateUI(); });
+
+function updateUI(){
+  countEl.textContent = Math.floor(count);
+  prodEl.textContent = (totalProduction()).toFixed(1);
+}
+
+/* --- Cheatit --- */
+const cheatInput = document.getElementById('cheatInput');
+const cheatBtn = document.getElementById('cheatBtn');
+const cheatMsg = document.getElementById('cheatMsg');
+
+function applyCheat(code){
+  const normalized = (code||'').trim().toLowerCase();
+  const m = normalized.match(/^mummo(\d+)$/);
+  if(m){
+    const x = parseInt(m[1],10);
+    count += x * 1_000_000_000;
+    cheatMsg.textContent = `Lisätty ${x} miljardia pullaa (kerta).`;
+    updateUI();
+  } else {
+    cheatMsg.textContent = 'Virheellinen koodi. Käytä muotoa mummo1, mummo2...';
+  }
+}
+cheatBtn.addEventListener('click', ()=>applyCheat(cheatInput.value));
+cheatInput.addEventListener('keydown',(e)=>{ if(e.key==='Enter') applyCheat(cheatInput.value); });
+
+/* --- Apurit --- */
+// Counters
+let mummoCount = 0, setaCount = 0, koiraCount = 0, kissaCount = 0;
+// Costs (start at 2€ each)
+let mummoCost = 2, setaCost = 2, koiraCost = 2, kissaCost = 2;
+// Production per unit (base) and multiplier (doubles each purchase)
+let mummoProd = 1, setaProd = 4, koiraProd = 10, kissaProd = 25;
+let mummoUnitProd = 1, setaUnitProd = 4, koiraUnitProd = 10, kissaUnitProd = 25;
+
+const buyAmountSel = document.getElementById('buyAmount');
+const mummoCountEl = document.getElementById('mummoCount');
+const setaCountEl = document.getElementById('setaCount');
+const koiraCountEl = document.getElementById('koiraCount');
+const kissaCountEl = document.getElementById('kissaCount');
+const mummoCostEl = document.getElementById('mummoCost');
+const setaCostEl = document.getElementById('setaCost');
+const koiraCostEl = document.getElementById('koiraCost');
+const kissaCostEl = document.getElementById('kissaCost');
+
+function totalProduction(){
+  // total production per second from everything
+  const prod = (mummoCount * mummoUnitProd) + (setaCount * setaUnitProd) + (koiraCount * koiraUnitProd) + (kissaCount * kissaUnitProd);
+  return prod;
+}
+
+function updateApuritUI(){
+  mummoCountEl.textContent = mummoCount;
+  setaCountEl.textContent = setaCount;
+  koiraCountEl.textContent = koiraCount;
+  kissaCountEl.textContent = kissaCount;
+  mummoCostEl.textContent = mummoCost;
+  setaCostEl.textContent = setaCost;
+  koiraCostEl.textContent = koiraCost;
+  kissaCostEl.textContent = kissaCost;
+  updateUI();
+}
+
+// cost formula for buying n units when current cost is c and increment per purchase is +1:
+// total = n*c + n*(n-1)/2
+function totalCostForN(currentCost, n){
+  return n*currentCost + (n*(n-1))/2;
+}
+
+function buyApuri(type){
+  const amount = parseInt(buyAmountSel.value,10);
+  let currentCost, owned, unitProd;
+  if(type==='mummo'){ currentCost = mummoCost; owned = mummoCount; unitProd = 'mummoUnitProd'; }
+  if(type==='seta'){ currentCost = setaCost; owned = setaCount; unitProd = 'setaUnitProd'; }
+  if(type==='koira'){ currentCost = koiraCost; owned = koiraCount; unitProd = 'koiraUnitProd'; }
+  if(type==='kissa'){ currentCost = kissaCost; owned = kissaCount; unitProd = 'kissaUnitProd'; }
+
+  const cost = totalCostForN(currentCost, amount);
+  if(count < cost){ alert('Ei tarpeeksi pullia ostoon.'); return; }
+  // Deduct
+  count -= cost;
+  // For each unit bought: increment owned by 1 and double the per-unit production
+  for(let i=0;i<amount;i++){
+    if(type==='mummo'){ mummoCount++; mummoUnitProd *= 2; mummoCost += 1; }
+    if(type==='seta'){ setaCount++; setaUnitProd *= 2; setaCost += 1; }
+    if(type==='koira'){ koiraCount++; koiraUnitProd *= 2; koiraCost += 1; }
+    if(type==='kissa'){ kissaCount++; kissaUnitProd *= 2; kissaCost += 1; }
+  }
+  updateApuritUI();
+}
+
+// Attach buy buttons
+document.getElementById('buyMummo').addEventListener('click', ()=>buyApuri('mummo'));
+document.getElementById('buySeta').addEventListener('click', ()=>buyApuri('seta'));
+document.getElementById('buyKoira').addEventListener('click', ()=>buyApuri('koira'));
+document.getElementById('buyKissa').addEventListener('click', ()=>buyApuri('kissa'));
+
+/* --- Aikalaskuri --- */
+let seconds = 0;
+const uptimeEl = document.getElementById('uptime');
+setInterval(()=>{
+  seconds++;
+  const d = Math.floor(seconds / 86400);
+  const h = Math.floor((seconds % 86400) / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = seconds % 60;
+  uptimeEl.textContent = `${d}d ${h}h ${m}m ${s}s`;
+},1000);
+
+/* --- Markkinat --- */
+const marketKeys = ['A','B','C','D'];
+let marketPrices = { A:10, B:15, C:25, D:50 };
+let marketHist = { A:[], B:[], C:[], D:[] };
+let marketInv = { A:0, B:0, C:0, D:0 };
+
+const marketTable = document.getElementById('marketTable');
+const marketInvEl = document.getElementById('marketInv');
+
+function updateMarketTableUI(){
+  const rows = marketTable.querySelectorAll('tr[data-key]');
+  rows.forEach(row=>{
+    const key = row.getAttribute('data-key');
+    row.querySelector('.price').textContent = marketPrices[key].toFixed(2);
+    const hist = marketHist[key];
+    if(hist.length>1){
+      const prev = hist[hist.length-2];
+      const change = ((marketPrices[key]-prev)/prev*100).toFixed(1);
+      row.querySelector('.change').textContent = (change>0?'+':'') + change + '%';
+    } else {
+      row.querySelector('.change').textContent = '0%';
+    }
+  });
+  const invText = Object.entries(marketInv).filter(([k,v)=>v>0).map(([k,v])=>`${k}:${v}`).join(', ');
+  marketInvEl.textContent = invText || 'Ei mitään';
+}
+
+/* Buy/sell handlers */
+marketTable.addEventListener('click',(e)=>{
+  if(e.target.classList.contains('buyMarket')){
+    const row = e.target.closest('tr');
+    const key = row.getAttribute('data-key');
+    // buy 1 for simplicity
+    const price = marketPrices[key];
+    if(count < price){ alert('Ei tarpeeksi pullia ostaaksesi markkinatuotteen.'); return; }
+    count -= price;
+    marketInv[key] += 1;
+    updateUI(); updateMarketTableUI();
+  } else if(e.target.classList.contains('sellMarket')){
+    const row = e.target.closest('tr');
+    const key = row.getAttribute('data-key');
+    if(marketInv[key] <=0){ alert('Ei myytävää.'); return; }
+    const price = marketPrices[key];
+    marketInv[key] -= 1;
+    count += price;
+    updateUI(); updateMarketTableUI();
+  }
+});
+
+/* Market price simulation every 60s (for demo you can lower to e.g. 10s) */
+function simulateMarketTick(){
+  marketKeys.forEach(k=>{
+    const old = marketPrices[k];
+    // random walk percent change between -5% and +5%
+    const pct = (Math.random()*10 - 5)/100;
+    let next = Math.max(0.1, old * (1 + pct));
+    // small momentum
+    marketPrices[k] = parseFloat(next.toFixed(2));
+    marketHist[k].push(marketPrices[k]);
+    if(marketHist[k].length>100) marketHist[k].shift();
+  });
+  updateMarketTableUI();
+  drawMarketChart();
+}
+// initial boot
+marketKeys.forEach(k=>marketHist[k].push(marketPrices[k]));
+updateMarketTableUI();
+drawMarketChart();
+
+// run every 60 seconds
+setInterval(simulateMarketTick, 60000);
+
+/* --- Market chart drawing: one line per product, and small labels showing latest % change --- */
+const chart = document.getElementById('marketChart');
+const ctx = chart.getContext('2d');
+
+function drawMarketChart(){
+  // clear
+  ctx.clearRect(0,0,chart.width,chart.height);
+  const colors = { A:'#1f77b4', B:'#ff7f0e', C:'#2ca02c', D:'#d62728' };
+  // determine global min/max
+  let all = [];
+  marketKeys.forEach(k=>all = all.concat(marketHist[k]));
+  const max = Math.max(...(all.length?all:[1]));
+  const min = Math.min(...(all.length?all:[0]));
+  const pad = (max-min)*0.1 || 1;
+  const top = max+pad, bottom = Math.max(0,min-pad);
+  const h = chart.height, w = chart.width;
+  // draw grid
+  ctx.strokeStyle = '#eee'; ctx.lineWidth = 1;
+  for(let i=0;i<4;i++){
+    const y = i*(h/4);
+    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke();
+  }
+  marketKeys.forEach((k,idx)=>{
+    const hist = marketHist[k];
+    if(hist.length<2) return;
+    ctx.beginPath();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = colors[k];
+    for(let i=0;i<hist.length;i++){
+      const x = (i/(hist.length-1)) * w;
+      const y = h - ((hist[i]-bottom)/(top-bottom))*h;
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    // draw latest label with percent change from previous
+    const L = hist.length;
+    if(L>1){
+      const change = ((hist[L-1]-hist[L-2])/hist[L-2]*100).toFixed(1);
+      ctx.fillStyle = colors[k];
+      ctx.font = '12px sans-serif';
+      ctx.fillText(`${k} ${change}%`, w-80, 14 + idx*14);
+    }
+  });
+}
+
+/* --- Auto production tick every second --- */
+setInterval(()=>{
+  const prod = totalProduction();
+  count += prod;
+  updateUI();
+},1000);
+
+/* --- For demo: allow faster market ticks (optional) ---
+You can uncomment the line below to simulate faster (every 5s) for testing.
+setInterval(simulateMarketTick, 5000);
+*/
+
+/* --- Initial UI update --- */
+updateApuritUI();
+updateUI();
+</script>
+
+</body>
+</html>
